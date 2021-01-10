@@ -1,69 +1,39 @@
 <script>
-  import {onMount} from 'svelte';
-  let count = 0;
-  onMount(() => {
-    const interval = setInterval(() => count++, 1000);
-    return () => {
-      clearInterval(interval);
-    };
-  });
+  import "./main.css";
+
+  import { timer } from "./timer";
+  import { interval } from "rxjs";
+  import { map, startWith } from "rxjs/operators";
+
+  const rxTimer = interval(1000).pipe(
+    startWith(0),
+    map((v) => v * 2)
+  );
 </script>
 
+<!-- App.svelte -->
 <style>
   :global(body) {
-    margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-  }
-  .App {
-    text-align: center;
-  }
-  .App code {
-    background: #0002;
-    padding: 4px 8px;
-    border-radius: 4px;
-  }
-  .App p {
-    margin: 0.4rem;
-  }
-
-  .App-header {
-    background-color: #f9f6f6;
-    color: #333;
-    min-height: 100vh;
+    font-size: 5rem;
+    height: 100vh;
     display: flex;
-    flex-direction: column;
+    background: azure;
+  }
+  .app {
+    display: grid;
     align-items: center;
     justify-content: center;
-    font-size: calc(10px + 2vmin);
+    width: 100%;
   }
-  .App-link {
-    color: #ff3e00;
-  }
-  .App-logo {
-    height: 36vmin;
-    pointer-events: none;
-    margin-bottom: 3rem;
-    animation: App-logo-pulse infinite 1.6s ease-in-out alternate;
-  }
-  @keyframes App-logo-pulse {
-    from {
-      transform: scale(1);
-    }
-    to {
-      transform: scale(1.06);
-    }
+  .box {
+    margin: 0 auto;
   }
 </style>
 
-<div class="App">
-  <header class="App-header">
-    <img src="/logo.svg" class="App-logo" alt="logo" />
-    <p>Edit <code>src/App.svelte</code> and save to reload.</p>
-    <p>Page has been open for <code>{count}</code> seconds.</p>
-    <p>
-      <a class="App-link" href="https://svelte.dev" target="_blank" rel="noopener noreferrer">
-        Learn Svelte
-      </a>
-    </p>
-  </header>
+<div class="app">
+  <div class="px-5 bg-green-300 box">
+    <div>TS Timer {$timer}</div>
+    <div>Rx Timer {$rxTimer}</div>
+  </div>
 </div>
